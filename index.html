@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Surebet</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 460px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 28px;
+      color: #22c55e;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #cbd5e1;
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #e2e8f0;
+    }
+
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      background: #020617;
+      color: white;
+      border: 1px solid #334155;
+    }
+
+    input:focus {
+      border-color: #22c55e;
+      box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25);
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.35);
+    }
+
+    .resultado {
+      margin-top: 25px;
+      background: #020617;
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid #334155;
+      display: none;
+    }
+
+    .linha {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      font-size: 15px;
+      color: #cbd5e1;
+    }
+
+    .linha strong {
+      color: #fff;
+    }
+
+    .lucro {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 14px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .positivo {
+      background: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+      border: 1px solid #22c55e;
+    }
+
+    .negativo {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+      border: 1px solid #ef4444;
+    }
+
+    .erro {
+      margin-top: 15px;
+      color: #f87171;
+      text-align: center;
+      display: none;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Surebet</h1>
+    <p class="subtitle">Calcule quanto apostar na segunda casa e veja seu lucro garantido.</p>
+
+    <div class="input-group">
+      <label>Quanto você apostou na Casa 1?</label>
+      <input type="number" id="valorCasa1" placeholder="Ex: 100">
+    </div>
+
+    <div class="input-group">
+      <label>Quanto a Casa 1 retorna?</label>
+      <input type="number" id="retornoCasa1" placeholder="Ex: 350">
+    </div>
+
+    <div class="input-group">
+      <label>Odd da Casa 2</label>
+      <input type="number" step="0.01" id="oddCasa2" placeholder="Ex: 1.95">
+    </div>
+
+    <button onclick="calcularSurebet()">Calcular Surebet</button>
+
+    <p class="erro" id="erro">Preencha todos os campos corretamente.</p>
+
+    <div class="resultado" id="resultado">
+      <div class="linha">
+        <span>Apostar na Casa 2:</span>
+        <strong id="apostarCasa2">R$ 0,00</strong>
+      </div>
+
+      <div class="linha">
+        <span>Retorno Casa 1:</span>
+        <strong id="retorno1">R$ 0,00</strong>
+      </div>
+
+      <div class="linha">
+        <span>Retorno Casa 2:</span>
+        <strong id="retorno2">R$ 0,00</strong>
+      </div>
+
+      <div class="linha">
+        <span>Total investido:</span>
+        <strong id="totalInvestido">R$ 0,00</strong>
+      </div>
+
+      <div class="lucro" id="lucroBox">
+        Lucro: R$ 0,00
+      </div>
+    </div>
+
+    <footer>
+      
+    </footer>
+  </div>
+
+  <script>
+    function formatarMoeda(valor) {
+      return valor.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });
+    }
+
+    function calcularSurebet() {
+      const valorCasa1 = parseFloat(document.getElementById("valorCasa1").value);
+      const retornoCasa1 = parseFloat(document.getElementById("retornoCasa1").value);
+      const oddCasa2 = parseFloat(document.getElementById("oddCasa2").value);
+
+      const erro = document.getElementById("erro");
+      const resultado = document.getElementById("resultado");
+      const lucroBox = document.getElementById("lucroBox");
+
+      if (!valorCasa1 || !retornoCasa1 || !oddCasa2 || oddCasa2 <= 1) {
+        erro.style.display = "block";
+        resultado.style.display = "none";
+        return;
+      }
+
+      erro.style.display = "none";
+
+      const apostaCasa2 = retornoCasa1 / oddCasa2;
+      const retornoCasa2 = apostaCasa2 * oddCasa2;
+      const totalInvestido = valorCasa1 + apostaCasa2;
+      const lucro = retornoCasa1 - totalInvestido;
+
+      document.getElementById("apostarCasa2").innerText = formatarMoeda(apostaCasa2);
+      document.getElementById("retorno1").innerText = formatarMoeda(retornoCasa1);
+      document.getElementById("retorno2").innerText = formatarMoeda(retornoCasa2);
+      document.getElementById("totalInvestido").innerText = formatarMoeda(totalInvestido);
+
+      lucroBox.innerText = "Lucro garantido: " + formatarMoeda(lucro);
+
+      lucroBox.classList.remove("positivo", "negativo");
+
+      if (lucro > 0) {
+        lucroBox.classList.add("positivo");
+      } else {
+        lucroBox.classList.add("negativo");
+      }
+
+      resultado.style.display = "block";
+    }
+  </script>
+</body>
+</html>
