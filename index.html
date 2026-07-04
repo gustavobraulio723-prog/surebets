@@ -1,3 +1,11 @@
+
+Pensei durante dois segundos
+Adicionei 2 modos na mesma página:
+
+Modo Retorno Fixo: você coloca quanto a Casa 1 retorna e a odd da Casa 2.
+
+Modo Surebet Completa: você coloca Odd 1, Odd 2 e valor total disponível, e ele calcula quanto apostar em cada casa.
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -403,3 +411,692 @@
   </script>
 </body>
 </html>
+No modo Surebet Completa, exemplo: odd 3.50 + odd 1.95 + R$300 total, ele divide certinho entre as duas casas e mostra o retorno dos dois lados.
+
+
+coloca botão de adicionar linha ( vai se tem casa 03, casa 04, casa 05...)
+
+Essa é uma ótima ideia. Eu faria um sistema mais profissional, parecido com uma planilha, em vez de limitar a 2 casas.
+
+Layout
+┌──────────────────────────────────────────┐
+│            CALCULADORA SUREBET           │
+├──────────────────────────────────────────┤
+│ Casa      Odd      Valor Apostado        │
+├──────────────────────────────────────────┤
+│ Casa 1   [1.95 ]   [100.00 ]             │
+│ Casa 2   [3.80 ]   [      ]              │
+│ Casa 3   [      ]   [      ]             │
+│ Casa 4   [      ]   [      ]             │
+│                                          │
+│ [+ Adicionar Casa]                       │
+│                                          │
+│ [ Calcular ]                             │
+└──────────────────────────────────────────┘
+Ao clicar em + Adicionar Casa, ele cria automaticamente mais uma linha:
+
+Casa 5
+Casa 6
+Casa 7
+...
+Sem limite.
+
+E eu colocaria 3 modos
+📈 Modo 1 - Retorno Igual (o que você já usa)
+Casa 1
+Aposta: 100
+Retorno: 350
+
+Casa 2
+Odd: 1.95
+
+↓
+
+Aposte 179,48
+Lucro 70,52
+🎯 Modo 2 - Surebet
+Casa      Odd
+Casa1    3.45
+Casa2    1.95
+Casa3    8.50
+Casa4    21.00
+Você informa apenas o investimento total.
+
+Ex:
+
+Investimento Total
+1000
+Ele divide automaticamente.
+
+Resultado
+
+Casa1 198,53
+Casa2 351,28
+Casa3 80,13
+Casa4 370,06
+
+Retorno garantido
+R$1.083,52
+
+Lucro
+R$83,52
+8,35%
+💰 Modo 3 (o mais útil)
+Você já apostou em uma casa e quer completar a sure.
+
+Casa      Odd     Apostado
+
+Casa1     4.20     250
+Casa2     1.91
+Casa3     12.50
+Casa4     20
+Ele calcula automaticamente quanto colocar em TODAS as outras.
+
+Exemplo:
+
+Casa1
+250
+
+↓
+
+Casa2
+549,48
+
+Casa3
+83,91
+
+Casa4
+52,33
+Tudo para deixar o mesmo retorno.
+
+Eu também adicionaria
+✔ Botão Adicionar Casa
+
+✔ Botão Remover Casa
+
+✔ Cores para lucro:
+
+🟢 Sure positiva
+
+🟡 Break-even
+
+🔴 Não é sure
+
+✔ Mostrar o índice
+
+Índice da Sure
+
+93.72%
+
+✔ É Surebet
+ou
+
+104.15%
+
+❌ Não é Surebet
+E deixaria com aparência de aplicativo profissional
+Em vez de parecer um formulário simples, faria estilo dashboard:
+
+💚 cards com cantos arredondados
+
+📊 gráficos de lucro
+
+💰 animação dos valores
+
+🌙 modo escuro elegante
+
+📱 responsivo para celular
+
+🟢 destaque automático para a melhor casa
+
+📋 botão para copiar os valores das apostas
+
+💾 salvar as surebets no navegador (histórico)
+
+📈 histórico de lucro acumulado
+
+Na minha opinião, esse formato ficaria muito mais parecido com uma ferramenta premium usada por quem trabalha com surebets diariamente do que uma calculadora básica.
+
+
+então faz ué porra
+
+Pensei durante dois segundos
+Fechou. Substitui tudo por esse index.html completo:
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Surebet</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #14532d, #020617 45%, #000);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 30px 15px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: 0 20px 70px rgba(0,0,0,0.55);
+    }
+
+    h1 {
+      text-align: center;
+      color: #22c55e;
+      font-size: 34px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #cbd5e1;
+      margin-bottom: 24px;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .tab {
+      padding: 13px;
+      border-radius: 14px;
+      border: 1px solid #334155;
+      background: #020617;
+      color: #cbd5e1;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .tab.active {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      border-color: #22c55e;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: bold;
+      color: #e2e8f0;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      background: #020617;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #22c55e;
+      box-shadow: 0 0 0 2px rgba(34,197,94,0.2);
+    }
+
+    .btn {
+      border: none;
+      border-radius: 14px;
+      padding: 14px 18px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(34,197,94,0.25);
+    }
+
+    .btn.secondary {
+      background: #1e293b;
+      border: 1px solid #334155;
+    }
+
+    .btn.danger {
+      background: #7f1d1d;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 18px 0;
+    }
+
+    .table {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      margin-top: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 650px;
+    }
+
+    th, td {
+      padding: 13px;
+      border-bottom: 1px solid #334155;
+      text-align: left;
+    }
+
+    th {
+      color: #94a3b8;
+      font-size: 13px;
+      background: #020617;
+    }
+
+    td input {
+      padding: 10px;
+    }
+
+    .remove {
+      background: #991b1b;
+      border: none;
+      color: white;
+      padding: 9px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .resultado {
+      margin-top: 22px;
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .card {
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .card span {
+      color: #94a3b8;
+      font-size: 13px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .card strong {
+      font-size: 20px;
+    }
+
+    .positivo {
+      border-color: #22c55e;
+      color: #22c55e;
+    }
+
+    .negativo {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    .aviso {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(239,68,68,0.12);
+      border: 1px solid #ef4444;
+      color: #fecaca;
+      display: none;
+    }
+
+    @media (max-width: 700px) {
+      .tabs, .grid, .resultado {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <h1>Calculadora Surebet</h1>
+    <p class="subtitle">Retorno fixo, surebet completa e múltiplas casas.</p>
+
+    <div class="tabs">
+      <button class="tab active" onclick="trocarModo('fixo', this)">Retorno Fixo</button>
+      <button class="tab" onclick="trocarModo('completa', this)">2 Casas</button>
+      <button class="tab" onclick="trocarModo('multi', this)">Várias Casas</button>
+    </div>
+
+    <section id="fixo" class="section active">
+      <div class="grid">
+        <div>
+          <label>Apostei na Casa 1</label>
+          <input id="fixoAposta1" type="number" placeholder="Ex: 100">
+        </div>
+        <div>
+          <label>Casa 1 retorna</label>
+          <input id="fixoRetorno1" type="number" placeholder="Ex: 350">
+        </div>
+        <div>
+          <label>Odd Casa 2</label>
+          <input id="fixoOdd2" type="number" step="0.01" placeholder="Ex: 1.95">
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularFixo()">Calcular</button>
+      <div class="aviso" id="avisoFixo"></div>
+
+      <div class="resultado" id="resultadoFixo">
+        <div class="card"><span>Apostar Casa 2</span><strong id="fixoAposta2"></strong></div>
+        <div class="card"><span>Total investido</span><strong id="fixoTotal"></strong></div>
+        <div class="card"><span>Retorno igual</span><strong id="fixoRetorno"></strong></div>
+        <div class="card" id="fixoLucroCard"><span>Lucro</span><strong id="fixoLucro"></strong></div>
+      </div>
+    </section>
+
+    <section id="completa" class="section">
+      <div class="grid">
+        <div>
+          <label>Odd Casa 1</label>
+          <input id="odd1" type="number" step="0.01" placeholder="Ex: 3.50">
+        </div>
+        <div>
+          <label>Odd Casa 2</label>
+          <input id="odd2" type="number" step="0.01" placeholder="Ex: 1.95">
+        </div>
+        <div>
+          <label>Valor total</label>
+          <input id="valorTotal2" type="number" placeholder="Ex: 300">
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularDuasCasas()">Calcular</button>
+      <div class="aviso" id="avisoCompleta"></div>
+
+      <div class="resultado" id="resultadoCompleta">
+        <div class="card"><span>Apostar Casa 1</span><strong id="apostaCasa1"></strong></div>
+        <div class="card"><span>Apostar Casa 2</span><strong id="apostaCasa2"></strong></div>
+        <div class="card"><span>Retorno garantido</span><strong id="retornoGarantido2"></strong></div>
+        <div class="card" id="lucroCard2"><span>Lucro</span><strong id="lucro2"></strong></div>
+      </div>
+    </section>
+
+    <section id="multi" class="section">
+      <div class="grid">
+        <div>
+          <label>Valor total para dividir</label>
+          <input id="valorTotalMulti" type="number" placeholder="Ex: 1000">
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn secondary" onclick="adicionarLinha()">+ Adicionar Casa</button>
+        <button class="btn" onclick="calcularMulti()">Calcular Surebet</button>
+        <button class="btn danger" onclick="limparMulti()">Limpar</button>
+      </div>
+
+      <div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Casa</th>
+              <th>Odd</th>
+              <th>Apostar</th>
+              <th>Retorno</th>
+              <th>Remover</th>
+            </tr>
+          </thead>
+          <tbody id="linhasCasas"></tbody>
+        </table>
+      </div>
+
+      <div class="aviso" id="avisoMulti"></div>
+
+      <div class="resultado" id="resultadoMulti">
+        <div class="card"><span>Índice da sure</span><strong id="indiceMulti"></strong></div>
+        <div class="card"><span>Total investido</span><strong id="totalMulti"></strong></div>
+        <div class="card"><span>Retorno garantido</span><strong id="retornoMulti"></strong></div>
+        <div class="card" id="lucroCardMulti"><span>Lucro</span><strong id="lucroMulti"></strong></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let contadorCasas = 0;
+
+    function moeda(valor) {
+      return valor.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
+    }
+
+    function trocarModo(id, botao) {
+      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+
+      document.getElementById(id).classList.add("active");
+      botao.classList.add("active");
+    }
+
+    function mostrarAviso(id, texto) {
+      const aviso = document.getElementById(id);
+      aviso.innerText = texto;
+      aviso.style.display = "block";
+    }
+
+    function esconderAviso(id) {
+      document.getElementById(id).style.display = "none";
+    }
+
+    function setLucroCard(cardId, lucro) {
+      const card = document.getElementById(cardId);
+      card.classList.remove("positivo", "negativo");
+      card.classList.add(lucro > 0 ? "positivo" : "negativo");
+    }
+
+    function calcularFixo() {
+      const aposta1 = parseFloat(document.getElementById("fixoAposta1").value);
+      const retorno1 = parseFloat(document.getElementById("fixoRetorno1").value);
+      const odd2 = parseFloat(document.getElementById("fixoOdd2").value);
+
+      if (!aposta1 || !retorno1 || !odd2 || odd2 <= 1) {
+        mostrarAviso("avisoFixo", "Preencha tudo corretamente.");
+        document.getElementById("resultadoFixo").style.display = "none";
+        return;
+      }
+
+      esconderAviso("avisoFixo");
+
+      const aposta2 = retorno1 / odd2;
+      const total = aposta1 + aposta2;
+      const lucro = retorno1 - total;
+
+      document.getElementById("fixoAposta2").innerText = moeda(aposta2);
+      document.getElementById("fixoTotal").innerText = moeda(total);
+      document.getElementById("fixoRetorno").innerText = moeda(retorno1);
+      document.getElementById("fixoLucro").innerText = moeda(lucro);
+
+      setLucroCard("fixoLucroCard", lucro);
+      document.getElementById("resultadoFixo").style.display = "grid";
+    }
+
+    function calcularDuasCasas() {
+      const odd1 = parseFloat(document.getElementById("odd1").value);
+      const odd2 = parseFloat(document.getElementById("odd2").value);
+      const total = parseFloat(document.getElementById("valorTotal2").value);
+
+      if (!odd1 || !odd2 || !total || odd1 <= 1 || odd2 <= 1) {
+        mostrarAviso("avisoCompleta", "Preencha tudo corretamente.");
+        document.getElementById("resultadoCompleta").style.display = "none";
+        return;
+      }
+
+      esconderAviso("avisoCompleta");
+
+      const somaInversa = (1 / odd1) + (1 / odd2);
+      const aposta1 = total * (1 / odd1) / somaInversa;
+      const aposta2 = total * (1 / odd2) / somaInversa;
+
+      const retorno1 = aposta1 * odd1;
+      const retorno2 = aposta2 * odd2;
+      const retornoGarantido = Math.min(retorno1, retorno2);
+      const lucro = retornoGarantido - total;
+
+      document.getElementById("apostaCasa1").innerText = moeda(aposta1);
+      document.getElementById("apostaCasa2").innerText = moeda(aposta2);
+      document.getElementById("retornoGarantido2").innerText = moeda(retornoGarantido);
+      document.getElementById("lucro2").innerText = `${moeda(lucro)} (${((lucro / total) * 100).toFixed(2)}%)`;
+
+      setLucroCard("lucroCard2", lucro);
+      document.getElementById("resultadoCompleta").style.display = "grid";
+    }
+
+    function adicionarLinha(odd = "") {
+      contadorCasas++;
+
+      const tbody = document.getElementById("linhasCasas");
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        <td>Casa ${contadorCasas}</td>
+        <td><input type="number" step="0.01" class="oddMulti" placeholder="Ex: 1.95" value="${odd}"></td>
+        <td><strong class="valorApostaMulti">R$ 0,00</strong></td>
+        <td><strong class="valorRetornoMulti">R$ 0,00</strong></td>
+        <td><button class="remove" onclick="this.closest('tr').remove(); renumerarCasas()">X</button></td>
+      `;
+
+      tbody.appendChild(tr);
+    }
+
+    function renumerarCasas() {
+      const linhas = document.querySelectorAll("#linhasCasas tr");
+      linhas.forEach((linha, index) => {
+        linha.children[0].innerText = `Casa ${index + 1}`;
+      });
+      contadorCasas = linhas.length;
+    }
+
+    function limparMulti() {
+      document.getElementById("linhasCasas").innerHTML = "";
+      document.getElementById("valorTotalMulti").value = "";
+      document.getElementById("resultadoMulti").style.display = "none";
+      esconderAviso("avisoMulti");
+
+      contadorCasas = 0;
+      adicionarLinha();
+      adicionarLinha();
+    }
+
+    function calcularMulti() {
+      const total = parseFloat(document.getElementById("valorTotalMulti").value);
+      const linhas = document.querySelectorAll("#linhasCasas tr");
+
+      if (!total || linhas.length < 2) {
+        mostrarAviso("avisoMulti", "Coloque o valor total e pelo menos 2 casas.");
+        document.getElementById("resultadoMulti").style.display = "none";
+        return;
+      }
+
+      const odds = [];
+
+      for (const linha of linhas) {
+        const odd = parseFloat(linha.querySelector(".oddMulti").value);
+
+        if (!odd || odd <= 1) {
+          mostrarAviso("avisoMulti", "Todas as odds precisam estar preenchidas e maiores que 1.");
+          document.getElementById("resultadoMulti").style.display = "none";
+          return;
+        }
+
+        odds.push(odd);
+      }
+
+      esconderAviso("avisoMulti");
+
+      const somaInversa = odds.reduce((acc, odd) => acc + (1 / odd), 0);
+      const indice = somaInversa * 100;
+
+      let menorRetorno = Infinity;
+
+      linhas.forEach((linha, index) => {
+        const odd = odds[index];
+        const aposta = total * (1 / odd) / somaInversa;
+        const retorno = aposta * odd;
+
+        menorRetorno = Math.min(menorRetorno, retorno);
+
+        linha.querySelector(".valorApostaMulti").innerText = moeda(aposta);
+        linha.querySelector(".valorRetornoMulti").innerText = moeda(retorno);
+      });
+
+      const lucro = menorRetorno - total;
+
+      document.getElementById("indiceMulti").innerText = `${indice.toFixed(2)}%`;
+      document.getElementById("totalMulti").innerText = moeda(total);
+      document.getElementById("retornoMulti").innerText = moeda(menorRetorno);
+      document.getElementById("lucroMulti").innerText = `${moeda(lucro)} (${((lucro / total) * 100).toFixed(2)}%)`;
+
+      setLucroCard("lucroCardMulti", lucro);
+
+      const indiceCard = document.getElementById("indiceMulti").closest(".card");
+      indiceCard.classList.remove("positivo", "negativo");
+      indiceCard.classList.add(indice < 100 ? "positivo" : "negativo");
+
+      document.getElementById("resultadoMulti").style.display = "grid";
+    }
+
+    adicionarLinha();
+    adicionarLinha();
+  </script>
+</body>
+</html>
+Agora tem botão + Adicionar Casa, e vai criando Casa 3, Casa 4, Casa 5…
+
+
