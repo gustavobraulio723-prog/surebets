@@ -15,7 +15,7 @@
 
     body {
       min-height: 100vh;
-      background: linear-gradient(135deg, #0f172a, #1e293b);
+      background: linear-gradient(135deg, #020617, #0f172a, #1e293b);
       color: #fff;
       display: flex;
       justify-content: center;
@@ -25,19 +25,19 @@
 
     .container {
       width: 100%;
-      max-width: 460px;
+      max-width: 520px;
       background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(12px);
-      border-radius: 22px;
+      backdrop-filter: blur(14px);
+      border-radius: 24px;
       padding: 28px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
       border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 10px;
-      font-size: 28px;
+      margin-bottom: 8px;
+      font-size: 30px;
       color: #22c55e;
     }
 
@@ -45,7 +45,39 @@
       text-align: center;
       color: #cbd5e1;
       font-size: 14px;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #334155;
+      background: #020617;
+      color: #cbd5e1;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      border-color: #22c55e;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
     }
 
     label {
@@ -56,7 +88,7 @@
     }
 
     .input-group {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     input {
@@ -76,7 +108,7 @@
       box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25);
     }
 
-    button {
+    .calc-btn {
       width: 100%;
       padding: 15px;
       border: none;
@@ -90,13 +122,13 @@
       transition: 0.2s;
     }
 
-    button:hover {
+    .calc-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 25px rgba(34, 197, 94, 0.35);
     }
 
     .resultado {
-      margin-top: 25px;
+      margin-top: 22px;
       background: #020617;
       border-radius: 16px;
       padding: 20px;
@@ -107,6 +139,7 @@
     .linha {
       display: flex;
       justify-content: space-between;
+      gap: 15px;
       margin-bottom: 14px;
       font-size: 15px;
       color: #cbd5e1;
@@ -114,6 +147,7 @@
 
     .linha strong {
       color: #fff;
+      text-align: right;
     }
 
     .lucro {
@@ -142,6 +176,7 @@
       color: #f87171;
       text-align: center;
       display: none;
+      font-weight: bold;
     }
 
     footer {
@@ -154,59 +189,118 @@
 </head>
 
 <body>
-  <div class="container">
+  <main class="container">
     <h1>Surebet</h1>
-    <p class="subtitle">Calcule quanto apostar na segunda casa e veja seu lucro garantido.</p>
+    <p class="subtitle">Calcule apostas, retornos e lucro garantido.</p>
 
-    <div class="input-group">
-      <label>Quanto você apostou na Casa 1?</label>
-      <input type="number" id="valorCasa1" placeholder="Ex: 100">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="trocarModo('retorno')">Retorno Fixo</button>
+      <button class="tab-btn" onclick="trocarModo('completa')">Surebet Completa</button>
     </div>
 
-    <div class="input-group">
-      <label>Quanto a Casa 1 retorna?</label>
-      <input type="number" id="retornoCasa1" placeholder="Ex: 350">
-    </div>
-
-    <div class="input-group">
-      <label>Odd da Casa 2</label>
-      <input type="number" step="0.01" id="oddCasa2" placeholder="Ex: 1.95">
-    </div>
-
-    <button onclick="calcularSurebet()">Calcular Surebet</button>
-
-    <p class="erro" id="erro">Preencha todos os campos corretamente.</p>
-
-    <div class="resultado" id="resultado">
-      <div class="linha">
-        <span>Apostar na Casa 2:</span>
-        <strong id="apostarCasa2">R$ 0,00</strong>
+    <section id="retorno" class="section active">
+      <div class="input-group">
+        <label>Quanto você apostou na Casa 1?</label>
+        <input type="number" id="valorCasa1" placeholder="Ex: 100">
       </div>
 
-      <div class="linha">
-        <span>Retorno Casa 1:</span>
-        <strong id="retorno1">R$ 0,00</strong>
+      <div class="input-group">
+        <label>Quanto a Casa 1 retorna?</label>
+        <input type="number" id="retornoCasa1" placeholder="Ex: 350">
       </div>
 
-      <div class="linha">
-        <span>Retorno Casa 2:</span>
-        <strong id="retorno2">R$ 0,00</strong>
+      <div class="input-group">
+        <label>Odd da Casa 2</label>
+        <input type="number" step="0.01" id="oddCasa2" placeholder="Ex: 1.95">
       </div>
 
-      <div class="linha">
-        <span>Total investido:</span>
-        <strong id="totalInvestido">R$ 0,00</strong>
+      <button class="calc-btn" onclick="calcularRetornoFixo()">Calcular</button>
+
+      <p class="erro" id="erroRetorno">Preencha todos os campos corretamente.</p>
+
+      <div class="resultado" id="resultadoRetorno">
+        <div class="linha">
+          <span>Apostar na Casa 2:</span>
+          <strong id="apostarCasa2">R$ 0,00</strong>
+        </div>
+
+        <div class="linha">
+          <span>Retorno Casa 1:</span>
+          <strong id="retorno1">R$ 0,00</strong>
+        </div>
+
+        <div class="linha">
+          <span>Retorno Casa 2:</span>
+          <strong id="retorno2">R$ 0,00</strong>
+        </div>
+
+        <div class="linha">
+          <span>Total investido:</span>
+          <strong id="totalInvestido">R$ 0,00</strong>
+        </div>
+
+        <div class="lucro" id="lucroBoxRetorno">
+          Lucro: R$ 0,00
+        </div>
+      </div>
+    </section>
+
+    <section id="completa" class="section">
+      <div class="input-group">
+        <label>Odd Casa 1</label>
+        <input type="number" step="0.01" id="odd1Completa" placeholder="Ex: 3.50">
       </div>
 
-      <div class="lucro" id="lucroBox">
-        Lucro: R$ 0,00
+      <div class="input-group">
+        <label>Odd Casa 2</label>
+        <input type="number" step="0.01" id="odd2Completa" placeholder="Ex: 1.95">
       </div>
-    </div>
+
+      <div class="input-group">
+        <label>Valor total para apostar</label>
+        <input type="number" id="valorTotalCompleta" placeholder="Ex: 300">
+      </div>
+
+      <button class="calc-btn" onclick="calcularSurebetCompleta()">Calcular Surebet</button>
+
+      <p class="erro" id="erroCompleta">Preencha todos os campos corretamente.</p>
+
+      <div class="resultado" id="resultadoCompleta">
+        <div class="linha">
+          <span>Apostar na Casa 1:</span>
+          <strong id="aposta1Completa">R$ 0,00</strong>
+        </div>
+
+        <div class="linha">
+          <span>Apostar na Casa 2:</span>
+          <strong id="aposta2Completa">R$ 0,00</strong>
+        </div>
+
+        <div class="linha">
+          <span>Retorno se Casa 1 bater:</span>
+          <strong id="retornoCasa1Completa">R$ 0,00</strong>
+        </div>
+
+        <div class="linha">
+          <span>Retorno se Casa 2 bater:</span>
+          <strong id="retornoCasa2Completa">R$ 0,00</strong>
+        </div>
+
+        <div class="linha">
+          <span>Total investido:</span>
+          <strong id="totalCompleta">R$ 0,00</strong>
+        </div>
+
+        <div class="lucro" id="lucroBoxCompleta">
+          Lucro: R$ 0,00
+        </div>
+      </div>
+    </section>
 
     <footer>
-      
+      Ferramenta para calcular distribuição de apostas entre duas casas.
     </footer>
-  </div>
+  </main>
 
   <script>
     function formatarMoeda(valor) {
@@ -216,14 +310,27 @@
       });
     }
 
-    function calcularSurebet() {
+    function trocarModo(modo) {
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+      document.getElementById(modo).classList.add('active');
+
+      if (modo === 'retorno') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+      } else {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+      }
+    }
+
+    function calcularRetornoFixo() {
       const valorCasa1 = parseFloat(document.getElementById("valorCasa1").value);
       const retornoCasa1 = parseFloat(document.getElementById("retornoCasa1").value);
       const oddCasa2 = parseFloat(document.getElementById("oddCasa2").value);
 
-      const erro = document.getElementById("erro");
-      const resultado = document.getElementById("resultado");
-      const lucroBox = document.getElementById("lucroBox");
+      const erro = document.getElementById("erroRetorno");
+      const resultado = document.getElementById("resultadoRetorno");
+      const lucroBox = document.getElementById("lucroBoxRetorno");
 
       if (!valorCasa1 || !retornoCasa1 || !oddCasa2 || oddCasa2 <= 1) {
         erro.style.display = "block";
@@ -246,12 +353,50 @@
       lucroBox.innerText = "Lucro garantido: " + formatarMoeda(lucro);
 
       lucroBox.classList.remove("positivo", "negativo");
+      lucroBox.classList.add(lucro > 0 ? "positivo" : "negativo");
 
-      if (lucro > 0) {
-        lucroBox.classList.add("positivo");
-      } else {
-        lucroBox.classList.add("negativo");
+      resultado.style.display = "block";
+    }
+
+    function calcularSurebetCompleta() {
+      const odd1 = parseFloat(document.getElementById("odd1Completa").value);
+      const odd2 = parseFloat(document.getElementById("odd2Completa").value);
+      const valorTotal = parseFloat(document.getElementById("valorTotalCompleta").value);
+
+      const erro = document.getElementById("erroCompleta");
+      const resultado = document.getElementById("resultadoCompleta");
+      const lucroBox = document.getElementById("lucroBoxCompleta");
+
+      if (!odd1 || !odd2 || !valorTotal || odd1 <= 1 || odd2 <= 1) {
+        erro.style.display = "block";
+        resultado.style.display = "none";
+        return;
       }
+
+      erro.style.display = "none";
+
+      const somaInversa = (1 / odd1) + (1 / odd2);
+
+      const aposta1 = (valorTotal / odd1) / somaInversa;
+      const aposta2 = (valorTotal / odd2) / somaInversa;
+
+      const retorno1 = aposta1 * odd1;
+      const retorno2 = aposta2 * odd2;
+
+      const retornoGarantido = Math.min(retorno1, retorno2);
+      const lucro = retornoGarantido - valorTotal;
+      const porcentagemLucro = (lucro / valorTotal) * 100;
+
+      document.getElementById("aposta1Completa").innerText = formatarMoeda(aposta1);
+      document.getElementById("aposta2Completa").innerText = formatarMoeda(aposta2);
+      document.getElementById("retornoCasa1Completa").innerText = formatarMoeda(retorno1);
+      document.getElementById("retornoCasa2Completa").innerText = formatarMoeda(retorno2);
+      document.getElementById("totalCompleta").innerText = formatarMoeda(valorTotal);
+
+      lucroBox.innerText = `Lucro garantido: ${formatarMoeda(lucro)} | ${porcentagemLucro.toFixed(2)}%`;
+
+      lucroBox.classList.remove("positivo", "negativo");
+      lucroBox.classList.add(lucro > 0 ? "positivo" : "negativo");
 
       resultado.style.display = "block";
     }
